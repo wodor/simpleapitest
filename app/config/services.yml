@@ -1,0 +1,48 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+
+# Examples of API resource mapping, learn more at
+# https://github.com/dunglas/DunglasApiBundle
+    resource.personal_address:
+        parent:    "api.resource"
+        arguments: [ "AppBundle\\Entity\\PostalAddress" ]
+        tags:      [ { name: "api.resource" } ]
+    resource.image:
+        parent:    "api.resource"
+        arguments: [ "AppBundle\\Entity\\ImageObject" ]
+        tags:      [ { name: "api.resource" } ]
+
+    data_uri_normalizer:
+        class: 'AppBundle\Serializer\DataUriNormalizer'
+        arguments:
+          - "@data_uri_mime_type_guesser"
+        tags:
+            - { name: serializer.normalizer }
+    image_file_normalizer:
+        class: 'AppBundle\Normalizer\ImageObjectNormalizer'
+        arguments:
+            - "@data_uri_normalizer"
+            - "@api.json_ld.normalizer.item"
+        tags:
+            - { name: serializer.normalizer }
+    data_uri_mime_type_guesser:
+        class: 'AppBundle\MimeType\DataUriMimeTypeGuesser'
+
+
+
+#    resource.image:
+#        parent:    "api.resource"
+#        arguments: [ "AppBundle\Entity\Product" ]
+#        calls:
+#            -      method:    "initItemOperations"
+#                   arguments: [ [ "@resource.product.item_operation.get", "@resource.product.item_operation.put", "@resource.product.item_operation.custom_get" ] ]
+#        tags:      [ { name: "api.resource" } ]
+
+# A typical service
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

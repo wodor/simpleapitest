@@ -1,0 +1,13 @@
+web:
+    image: vincentchalamon/symfony
+    volumes:
+        - .:/var/www
+    tty: true
+
+mysql:
+    image: mysql
+    environment:
+        MYSQL_DATABASE: api
+        MYSQL_USER: root
+        MYSQL_ROOT_PASSWORD: root
+
